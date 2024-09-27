@@ -300,7 +300,7 @@ const appConfig = defuFn(inlineAppConfig);
 
 const _inlineRuntimeConfig = {
   "app": {
-    "baseURL": "/",
+    "baseURL": "/YoyoWeather/",
     "buildId": "dev",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
