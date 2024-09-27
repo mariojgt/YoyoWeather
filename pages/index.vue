@@ -1,66 +1,60 @@
 <template>
     <div class="min-h-screen bg-gradient-to-br from-blue-400 to-blue-600 text-white p-5">
-      <!-- App Header -->
-      <header class="text-center py-6">
-        <h1 class="text-5xl font-extrabold tracking-wide">YoyoWeather</h1>
-        <p class="text-xl mt-2 font-light">Your 5-Day Weather Forecast Companion</p>
-      </header>
+        <!-- App Header -->
+        <header class="text-center py-6">
+            <h1 class="text-5xl font-extrabold tracking-wide">YoyoWeather</h1>
+            <p class="text-xl mt-2 font-light">Your 5-Day Weather Forecast Companion</p>
+        </header>
 
-      <!-- Search Bar -->
-      <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
-        <UInput
-          class="w-full md:w-1/2 bg-white text-gray-800 rounded-md shadow-lg focus:ring-2 focus:ring-blue-500"
-          v-model="location"
-          variant="outline"
-          placeholder="Enter a location for the weather forecast"
-        />
-        <UButton
-          @click="searchWeather(location)"
-          label="Search"
-          class="px-6 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-all"
-        />
-      </div>
+        <!-- Search Bar -->
+        <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
+            <UInput class="w-full md:w-1/2 bg-white text-gray-800 rounded-md shadow-lg focus:ring-2 focus:ring-blue-500"
+                v-model="location" variant="outline" placeholder="Enter a location for the weather forecast" />
+            <UButton @click="searchWeather(location)" label="Search"
+                class="px-6 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-all" />
+        </div>
 
-      <!-- Quick Location Buttons -->
-      <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
-        <UButton
-          @click="searchWeather('London')"
-          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
-          London
-        </UButton>
-        <UButton
-          @click="searchWeather('Paris')"
-          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
-          Paris
-        </UButton>
-        <UButton
-          @click="searchWeather('New York')"
-          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
-          New York
-        </UButton>
-        <UButton
-          @click="searchWeather('Los Angeles')"
-          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
-          Los Angeles
-        </UButton>
-      </div>
+        <!-- Quick Location Buttons -->
+        <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
+            <UButton @click="searchWeather('London')"
+                class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+                London
+            </UButton>
+            <UButton @click="searchWeather('Paris')"
+                class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+                Paris
+            </UButton>
+            <UButton @click="searchWeather('New York')"
+                class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+                New York
+            </UButton>
+            <UButton @click="searchWeather('Los Angeles')"
+                class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+                Los Angeles
+            </UButton>
+            <!-- New Button for Current Location -->
+            <UButton @click="getCurrentLocation"
+                class="px-6 py-2 bg-yellow-500 text-white rounded-md shadow-md hover:bg-yellow-600 transition-all">
+                Use My Location
+            </UButton>
+        </div>
 
-      <!-- Weather Forecast Header -->
-      <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
-        <h2 class="text-center text-2xl font-bold col-span-full">Weather Forecast for {{ location }}</h2>
-      </div>
+        <!-- Weather Forecast Header -->
+        <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+            <h2 class="text-center text-2xl font-bold col-span-full">Weather Forecast for {{ location }}</h2>
+        </div>
 
-      <!-- Weather Cards -->
-      <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
-        <WeatherCard v-for="(day, index) in forecast" :key="index" :day="day" />
-      </div>
+        <!-- Weather Cards -->
+        <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+            <WeatherCard v-for="(day, index) in forecast" :key="index" :day="day" />
+        </div>
 
-      <!-- Error Message -->
-      <div v-else class="text-center text-gray-600">
-        <UAlert v-if="error" :title="error" color="red" />
-      </div>
+        <!-- Error Message -->
+        <div v-else class="text-center text-gray-600">
+            <UAlert v-if="error" :title="error" color="red" />
+        </div>
     </div>
-  </template>
+</template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -81,7 +75,6 @@ const forecast = ref<Forecast[]>([])
 const error = ref<string>('')
 
 const searchWeather = async (defaultLocation: string = '') => {
-
     if (defaultLocation) {
         location.value = defaultLocation
     }
@@ -100,28 +93,48 @@ const searchWeather = async (defaultLocation: string = '') => {
 
         if (geoData.results && geoData.results.length > 0) {
             const { latitude, longitude } = geoData.results[0]
-
-            // Step 2: Get weather forecast from the Weather API
-            const weatherResponse = await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max&timezone=auto`
-            )
-            const weatherData = await weatherResponse.json()
-
-            // Get the forecast for the next 5 days
-            forecast.value = weatherData.daily.time.slice(0, 5).map((date: string, index: number) => ({
-                date: new Date(date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' }),
-                icon: getWeatherIcon(weatherData.daily.weathercode[index]),
-                description: getWeatherDescription(weatherData.daily.weathercode[index]),
-                temperature: Math.round(weatherData.daily.temperature_2m_max[index]),
-                windSpeed: Math.round(weatherData.daily.windspeed_10m_max[index])
-            }))
-            error.value = ''
+            // Use the reusable function to get the weather data
+            await fetchWeatherByCoordinates(latitude, longitude)
         } else {
             toast.add({ title: 'Location not found. Please try another search.', color: 'red' })
             error.value = 'Location not found. Please try another search.'
         }
     } catch (err) {
         error.value = 'There was an error fetching the weather data. Please try again.'
+    }
+}
+
+const fetchWeatherByCoordinates = async (latitude: number, longitude: number) => {
+    try {
+        const weatherResponse = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=temperature_2m_max,temperature_2m_min,weathercode,windspeed_10m_max&timezone=auto`
+        )
+        const weatherData = await weatherResponse.json()
+
+        forecast.value = weatherData.daily.time.slice(0, 5).map((date: string, index: number) => ({
+            date: new Date(date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' }),
+            icon: getWeatherIcon(weatherData.daily.weathercode[index]),
+            description: getWeatherDescription(weatherData.daily.weathercode[index]),
+            temperature: Math.round(weatherData.daily.temperature_2m_max[index]),
+            windSpeed: Math.round(weatherData.daily.windspeed_10m_max[index]),
+        }))
+
+        error.value = ''
+    } catch (err) {
+        error.value = 'There was an error fetching the weather data.'
+    }
+}
+
+const getCurrentLocation = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const { latitude, longitude } = position.coords
+            await fetchWeatherByCoordinates(latitude, longitude)
+        }, () => {
+            error.value = 'Unable to retrieve your location.'
+        })
+    } else {
+        error.value = 'Geolocation is not supported by this browser.'
     }
 }
 
