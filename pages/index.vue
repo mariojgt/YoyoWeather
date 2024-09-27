@@ -2,6 +2,8 @@
     <div class="min-h-screen bg-gradient-to-br from-blue-400 to-blue-600 text-white p-5">
         <!-- App Header -->
         <header class="text-center py-6">
+            <!-- logo gif -->
+            <img src="/icons/dude.gif" alt="YoyoWeather Logo" class="w-50 mx-auto" />
             <h1 class="text-5xl font-extrabold tracking-wide">YoyoWeather</h1>
             <p class="text-xl mt-2 font-light">Your 5-Day Weather Forecast Companion</p>
         </header>
