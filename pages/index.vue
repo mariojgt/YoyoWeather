@@ -44,8 +44,8 @@ interface Forecast {
     windSpeed: number
 }
 
-const location = ref<string>('') // Reactive location string
-const forecast = ref<Forecast[]>([]) // Reactive forecast array
+const location = ref<string>('')
+const forecast = ref<Forecast[]>([])
 const error = ref<string>('')
 
 const searchWeather = async (defaultLocation: string = '') => {
@@ -60,7 +60,7 @@ const searchWeather = async (defaultLocation: string = '') => {
     }
 
     try {
-        // Step 1: Get lat and lon from the Geocoding API
+        // Step 1: Get lat and lon from the location using the API
         const geoResponse = await fetch(
             `https://geocoding-api.open-meteo.com/v1/search?name=${location.value}`
         )
@@ -75,6 +75,7 @@ const searchWeather = async (defaultLocation: string = '') => {
             )
             const weatherData = await weatherResponse.json()
 
+            // Get the forecast for the next 5 days
             forecast.value = weatherData.daily.time.slice(0, 5).map((date: string, index: number) => ({
                 date: new Date(date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' }),
                 icon: getWeatherIcon(weatherData.daily.weathercode[index]),
@@ -92,6 +93,7 @@ const searchWeather = async (defaultLocation: string = '') => {
     }
 }
 
+// Helper functions
 
 const getWeatherIcon = (code: number) => {
     const icons: Record<number, string> = {
