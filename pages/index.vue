@@ -11,10 +11,13 @@
             <UButton @click="searchWeather" label="Search" />
         </div>
         <div class="flex justify-center my-8 gap-2 md:gap-4 md:flex-row flex-col">
-            <UButton>London</UButton>
-            <UButton>Paris</UButton>
-            <UButton>New York</UButton>
-            <UButton>Los Angeles</UButton>
+            <UButton @click="searchWeather('London')">London</UButton>
+            <UButton @click="searchWeather('Paris')">Paris</UButton>
+            <UButton @click="searchWeather('New York')">New York</UButton>
+            <UButton @click="searchWeather('Los Angeles')">Los Angeles</UButton>
+        </div>
+        <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+            <h2 class="text-center text-2xl font-bold col-span-full">Weather Forecast for {{ location }}</h2>
         </div>
 
         <!-- Weather Cards -->
@@ -45,7 +48,12 @@ const location = ref<string>('') // Reactive location string
 const forecast = ref<Forecast[]>([]) // Reactive forecast array
 const error = ref<string>('')
 
-const searchWeather = async () => {
+const searchWeather = async (defaultLocation: string = '') => {
+
+    if (defaultLocation) {
+        location.value = defaultLocation
+    }
+
     if (!location.value) {
         error.value = 'Please enter a location.'
         return
@@ -91,19 +99,41 @@ const getWeatherIcon = (code: number) => {
         1: '/icons/partly-cloudy.svg',
         2: '/icons/cloudy.svg',
         3: '/icons/rainy.svg',
-        45: '/icons/foggy.svg'
-        // More icons if we need
+        45: '/icons/foggy.svg',
     }
-    return icons[code] || '/icons/default.png'
+    return icons[code] || '/icons/rainy.svg'
 }
 
 const getWeatherDescription = (code: number) => {
     const descriptions: Record<number, string> = {
-        0: 'Sunny',
-        1: 'Partly Cloudy',
-        2: 'Cloudy',
-        3: 'Rainy',
-        45: 'Foggy'
+        0: 'Clear sky',
+        1: 'Mainly clear',
+        2: 'Partly cloudy',
+        3: 'Overcast',
+        45: 'Fog',
+        48: 'Depositing rime fog',
+        51: 'Drizzle: Light intensity',
+        53: 'Drizzle: Moderate intensity',
+        55: 'Drizzle: Dense intensity',
+        56: 'Freezing Drizzle: Light intensity',
+        57: 'Freezing Drizzle: Dense intensity',
+        61: 'Rain: Slight intensity',
+        63: 'Rain: Moderate intensity',
+        65: 'Rain: Heavy intensity',
+        66: 'Freezing Rain: Light intensity',
+        67: 'Freezing Rain: Heavy intensity',
+        71: 'Snow fall: Slight intensity',
+        73: 'Snow fall: Moderate intensity',
+        75: 'Snow fall: Heavy intensity',
+        77: 'Snow grains',
+        80: 'Rain showers: Slight intensity',
+        81: 'Rain showers: Moderate intensity',
+        82: 'Rain showers: Violent intensity',
+        85: 'Snow showers: Slight intensity',
+        86: 'Snow showers: Heavy intensity',
+        95: 'Thunderstorm: Slight or moderate',
+        96: 'Thunderstorm with slight hail',
+        99: 'Thunderstorm with heavy hail'
         // More codes if we need https://open-meteo.com/en/docs
     }
     return descriptions[code] || 'Unknown'
