@@ -8,7 +8,7 @@
         <!-- Search Bar -->
         <div class="flex justify-center my-8 gap-2 md:gap-4 md:flex-row flex-col">
             <UInput class="w-full md:w-1/2"  v-model="location" variant="outline" placeholder="Enter a location fo the weather forecast" />
-            <UButton @click="searchWeather" label="Search" />
+            <UButton @click="searchWeather(location)" label="Search" />
         </div>
         <div class="flex justify-center my-8 gap-2 md:gap-4 md:flex-row flex-col">
             <UButton @click="searchWeather('London')">London</UButton>
