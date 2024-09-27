@@ -129,13 +129,13 @@ const searchWeather = async (defaultLocation: string = '') => {
 
 const getWeatherIcon = (code: number) => {
     const icons: Record<number, string> = {
-        0: '/YoyoWeather/icons/sunny.svg',
-        1: '/YoyoWeather/icons/partly-cloudy.svg',
-        2: '/YoyoWeather/icons/cloudy.svg',
-        3: '/YoyoWeather/icons/rainy.svg',
-        45: '/YoyoWeather/icons/foggy.svg',
+        0: '/YoyoWeather/icons/sunny.png',
+        1: '/YoyoWeather/icons/partly-cloudy.png',
+        2: '/YoyoWeather/icons/cloudy.png',
+        3: '/YoyoWeather/icons/rainy.png',
+        45: '/YoyoWeather/icons/foggy.png',
     }
-    return icons[code] || '/YoyoWeather/icons/rainy.svg'
+    return icons[code] || '/YoyoWeather/icons/rainy.png'
 }
 
 const getWeatherDescription = (code: number) => {
