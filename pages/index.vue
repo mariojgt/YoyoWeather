@@ -1,34 +1,66 @@
 <template>
-    <div class="min-h-screen">
-        <!-- App Header -->
-        <header class="text-center py-6 bg-blue-500 text-white">
-            <h1 class="text-4xl font-bold">YoyoWeather</h1>
-        </header>
+    <div class="min-h-screen bg-gradient-to-br from-blue-400 to-blue-600 text-white p-5">
+      <!-- App Header -->
+      <header class="text-center py-6">
+        <h1 class="text-5xl font-extrabold tracking-wide">YoyoWeather</h1>
+        <p class="text-xl mt-2 font-light">Your 5-Day Weather Forecast Companion</p>
+      </header>
 
-        <!-- Search Bar -->
-        <div class="flex justify-center my-8 gap-2 md:gap-4 md:flex-row flex-col">
-            <UInput class="w-full md:w-1/2"  v-model="location" variant="outline" placeholder="Enter a location fo the weather forecast" />
-            <UButton @click="searchWeather(location)" label="Search" />
-        </div>
-        <div class="flex justify-center my-8 gap-2 md:gap-4 md:flex-row flex-col">
-            <UButton @click="searchWeather('London')">London</UButton>
-            <UButton @click="searchWeather('Paris')">Paris</UButton>
-            <UButton @click="searchWeather('New York')">New York</UButton>
-            <UButton @click="searchWeather('Los Angeles')">Los Angeles</UButton>
-        </div>
-        <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
-            <h2 class="text-center text-2xl font-bold col-span-full">Weather Forecast for {{ location }}</h2>
-        </div>
+      <!-- Search Bar -->
+      <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
+        <UInput
+          class="w-full md:w-1/2 bg-white text-gray-800 rounded-md shadow-lg focus:ring-2 focus:ring-blue-500"
+          v-model="location"
+          variant="outline"
+          placeholder="Enter a location for the weather forecast"
+        />
+        <UButton
+          @click="searchWeather(location)"
+          label="Search"
+          class="px-6 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-all"
+        />
+      </div>
 
-        <!-- Weather Cards -->
-        <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
-            <WeatherCard v-for="(day, index) in forecast" :key="index" :day="day" />
-        </div>
-        <div v-else class="text-center text-gray-600">
-            <UAlert v-if="error" :title="error" color="red" />
-        </div>
+      <!-- Quick Location Buttons -->
+      <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
+        <UButton
+          @click="searchWeather('London')"
+          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+          London
+        </UButton>
+        <UButton
+          @click="searchWeather('Paris')"
+          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+          Paris
+        </UButton>
+        <UButton
+          @click="searchWeather('New York')"
+          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+          New York
+        </UButton>
+        <UButton
+          @click="searchWeather('Los Angeles')"
+          class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
+          Los Angeles
+        </UButton>
+      </div>
+
+      <!-- Weather Forecast Header -->
+      <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+        <h2 class="text-center text-2xl font-bold col-span-full">Weather Forecast for {{ location }}</h2>
+      </div>
+
+      <!-- Weather Cards -->
+      <div v-if="forecast.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 p-6">
+        <WeatherCard v-for="(day, index) in forecast" :key="index" :day="day" />
+      </div>
+
+      <!-- Error Message -->
+      <div v-else class="text-center text-gray-600">
+        <UAlert v-if="error" :title="error" color="red" />
+      </div>
     </div>
-</template>
+  </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
