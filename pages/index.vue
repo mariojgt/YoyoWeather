@@ -3,39 +3,48 @@
         <!-- App Header -->
         <header class="text-center py-6">
             <!-- logo gif -->
-            <img src="/icons/dude.gif" alt="YoyoWeather Logo" class="w-50 mx-auto" />
+            <UTooltip text="Mr Drizzleton" :popper="{ placement: 'button' }">
+                <img src="/icons/dude.gif" alt="YoyoWeather Logo" class="w-50 mx-auto" />
+            </UTooltip>
             <h1 class="text-5xl font-extrabold tracking-wide">YoyoWeather</h1>
             <p class="text-xl mt-2 font-light">Your 5-Day Weather Forecast Companion</p>
         </header>
 
-        <!-- Search Bar -->
-        <div class="flex justify-center my-8 gap-2 md:gap-4">
+        <!-- Search Bar with Debounce and Loading Indicator -->
+        <div class="flex justify-center my-8 gap-2 md:gap-4 relative">
             <UInput class="w-full md:w-1/2 bg-white text-gray-800 rounded-md shadow-lg focus:ring-2 focus:ring-blue-500"
-                v-model="location" variant="outline" placeholder="Enter a location..." />
-            <UButton @click="searchWeather(location)" label="Search"
-                color="yellow" variant="solid"
-                class="px-6 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-all" />
+                v-model="location" variant="outline" placeholder="Enter a location..."
+                @update:model-value="debounceSearch" />
+        </div>
+        <div class="flex justify-center my-8 gap-2 md:gap-4 relative" v-if="loading">
+            <svg class="w-16 h-16 animate-spin text-gray-900/50" viewBox="0 0 64 64" fill="none"
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                <path
+                    d="M32 3C35.8083 3 39.5794 3.75011 43.0978 5.20749C46.6163 6.66488 49.8132 8.80101 52.5061 11.4939C55.199 14.1868 57.3351 17.3837 58.7925 20.9022C60.2499 24.4206 61 28.1917 61 32C61 35.8083 60.2499 39.5794 58.7925 43.0978C57.3351 46.6163 55.199 49.8132 52.5061 52.5061C49.8132 55.199 46.6163 57.3351 43.0978 58.7925C39.5794 60.2499 35.8083 61 32 61C28.1917 61 24.4206 60.2499 20.9022 58.7925C17.3837 57.3351 14.1868 55.199 11.4939 52.5061C8.801 49.8132 6.66487 46.6163 5.20749 43.0978C3.7501 39.5794 3 35.8083 3 32C3 28.1917 3.75011 24.4206 5.2075 20.9022C6.66489 17.3837 8.80101 14.1868 11.4939 11.4939C14.1868 8.80099 17.3838 6.66487 20.9022 5.20749C24.4206 3.7501 28.1917 3 32 3L32 3Z"
+                    stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path
+                    d="M32 3C36.5778 3 41.0906 4.08374 45.1692 6.16256C49.2477 8.24138 52.7762 11.2562 55.466 14.9605C58.1558 18.6647 59.9304 22.9531 60.6448 27.4748C61.3591 31.9965 60.9928 36.6232 59.5759 40.9762"
+                    stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-gray-900">
+                </path>
+            </svg>
         </div>
 
         <!-- Quick Location Buttons -->
         <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
-            <UButton @click="searchWeather('London')"
-                color="yellow" variant="solid"
+            <UButton @click="searchWeather('London')" color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 London
             </UButton>
-            <UButton @click="searchWeather('Paris')"
-                color="yellow" variant="solid"
+            <UButton @click="searchWeather('Paris')" color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 Paris
             </UButton>
-            <UButton @click="searchWeather('New York')"
-                color="yellow" variant="solid"
+            <UButton @click="searchWeather('New York')" color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 New York
             </UButton>
-            <UButton @click="searchWeather('Los Angeles')"
-                color="yellow" variant="solid"
+            <UButton @click="searchWeather('Los Angeles')" color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 Los Angeles
             </UButton>
@@ -75,6 +84,7 @@ interface Forecast {
 const location = ref<string>('')
 const forecast = ref<Forecast[]>([])
 const error = ref<string>('')
+const loading = ref<boolean>(false)
 
 const searchWeather = async (defaultLocation: string = '') => {
     if (defaultLocation) {
@@ -87,6 +97,7 @@ const searchWeather = async (defaultLocation: string = '') => {
     }
 
     try {
+        loading.value = true // Start loading when fetching data
         // Step 1: Get lat and lon from the location using the API
         const geoResponse = await fetch(
             `https://geocoding-api.open-meteo.com/v1/search?name=${location.value}`
@@ -103,6 +114,8 @@ const searchWeather = async (defaultLocation: string = '') => {
         }
     } catch (err) {
         error.value = 'There was an error fetching the weather data. Please try again.'
+    } finally {
+        loading.value = false // Stop loading once the data is fetched
     }
 }
 
@@ -138,6 +151,20 @@ const getCurrentLocation = () => {
     } else {
         error.value = 'Geolocation is not supported by this browser.'
     }
+}
+
+// Declare a variable to store the timeout ID for debouncing
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null
+
+// Debounced function to handle search
+const debounceSearch = (location: string) => {
+    // Clear the previous timeout
+    if (debounceTimeout) clearTimeout(debounceTimeout)
+
+    // Set a new timeout to trigger search after 2 seconds of no typing
+    debounceTimeout = setTimeout(() => {
+        searchWeather(location)
+    }, 500)
 }
 
 // Helper functions
