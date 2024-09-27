@@ -7,9 +7,9 @@
         </header>
 
         <!-- Search Bar -->
-        <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
+        <div class="flex justify-center my-8 gap-2 md:gap-4">
             <UInput class="w-full md:w-1/2 bg-white text-gray-800 rounded-md shadow-lg focus:ring-2 focus:ring-blue-500"
-                v-model="location" variant="outline" placeholder="Enter a location for the weather forecast" />
+                v-model="location" variant="outline" placeholder="Enter a location..." />
             <UButton @click="searchWeather(location)" label="Search"
                 class="px-6 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-all" />
         </div>
