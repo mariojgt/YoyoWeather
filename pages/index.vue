@@ -13,24 +13,29 @@
             <UInput class="w-full md:w-1/2 bg-white text-gray-800 rounded-md shadow-lg focus:ring-2 focus:ring-blue-500"
                 v-model="location" variant="outline" placeholder="Enter a location..." />
             <UButton @click="searchWeather(location)" label="Search"
+                color="yellow" variant="solid"
                 class="px-6 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition-all" />
         </div>
 
         <!-- Quick Location Buttons -->
         <div class="flex justify-center my-8 gap-2 md:gap-4 flex-col md:flex-row">
             <UButton @click="searchWeather('London')"
+                color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 London
             </UButton>
             <UButton @click="searchWeather('Paris')"
+                color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 Paris
             </UButton>
             <UButton @click="searchWeather('New York')"
+                color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 New York
             </UButton>
             <UButton @click="searchWeather('Los Angeles')"
+                color="yellow" variant="solid"
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 Los Angeles
             </UButton>
