@@ -105,7 +105,7 @@
         "./tailwind.config/*"
       ],
       "#app-manifest": [
-        "./manifest/meta/96666023-00b5-413c-a03b-1cfde4c157db.json"
+        "./manifest/meta/dev.json"
       ],
       "#build": [
         "."

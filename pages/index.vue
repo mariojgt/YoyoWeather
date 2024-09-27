@@ -75,7 +75,7 @@ const searchWeather = async (defaultLocation: string = '') => {
             )
             const weatherData = await weatherResponse.json()
 
-            forecast.value = weatherData.daily.time.map((date: string, index: number) => ({
+            forecast.value = weatherData.daily.time.slice(0, 5).map((date: string, index: number) => ({
                 date: new Date(date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' }),
                 icon: getWeatherIcon(weatherData.daily.weathercode[index]),
                 description: getWeatherDescription(weatherData.daily.weathercode[index]),
