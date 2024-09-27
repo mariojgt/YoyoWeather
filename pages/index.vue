@@ -6,7 +6,7 @@
             <UTooltip text="Mr Drizzleton" :popper="{ placement: 'button' }">
                 <img src="/icons/dude.gif" alt="YoyoWeather Logo" class="w-50 mx-auto" />
             </UTooltip>
-            <h1 class="text-5xl font-extrabold tracking-wide">YoyoWeather</h1>
+            <h1 class="text-5xl font-extrabold tracking-wide">Mr Drizzleton</h1>
             <p class="text-xl mt-2 font-light">Your 5-Day Weather Forecast Companion</p>
         </header>
 
@@ -17,7 +17,7 @@
                 @update:model-value="debounceSearch" />
             <!-- Loading spinner -->
             <div v-if="loading" class="absolute inset-y-0 flex items-center pr-3">
-                <svg class="w-6 h-6 text-blue-500 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="w-6 h-6 text-yellow-500 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 2a10 10 0 0110 10H2A10 10 0 0112 2z"></path>
                 </svg>
@@ -154,7 +154,7 @@ let debounceTimeout: ReturnType<typeof setTimeout> | null = null
 const debounceSearch = (location: string) => {
     // Clear the previous timeout
     if (debounceTimeout) clearTimeout(debounceTimeout)
-
+    loading.value = true
     // Set a new timeout to trigger search after 2 seconds of no typing
     debounceTimeout = setTimeout(() => {
         searchWeather(location)
