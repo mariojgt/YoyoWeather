@@ -32,11 +32,6 @@
                 class="px-6 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all">
                 Los Angeles
             </UButton>
-            <!-- New Button for Current Location -->
-            <UButton @click="getCurrentLocation"
-                class="px-6 py-2 bg-yellow-500 text-white rounded-md shadow-md hover:bg-yellow-600 transition-all">
-                Use My Location
-            </UButton>
         </div>
 
         <!-- Weather Forecast Header -->
@@ -185,4 +180,8 @@ const getWeatherDescription = (code: number) => {
     }
     return descriptions[code] || 'Unknown'
 }
+
+onMounted(() => {
+    getCurrentLocation()
+})
 </script>
